@@ -1,10 +1,8 @@
-// v2
+// v3
 // Runtime: 88 ms, faster than 78.97% of JavaScript online submissions for Longest Substring with At Least K Repeating Characters.
-// Memory Usage: 40.1 MB, less than 77.25% of JavaScript online submissions for Longest Substring with At Least K Repeating Characters.
+// Memory Usage: 39.4 MB, less than 91.85% of JavaScript online submissions for Longest Substring with At Least K Repeating Characters.
 const longestSubstring = (str, k) => {
   if (k < 2) return str.length;
-
-  let maxLength = 0;
 
   const find = substr => {
     // count repetitions
@@ -13,19 +11,37 @@ const longestSubstring = (str, k) => {
     // find characters that repeted less than `k` times
     const less = Object.keys(seen).filter(char => seen[char] < k);
     // update max length if the condition is met
-    if (!less.length) {
-      maxLength = Math.max(maxLength, substr.length);
-      return;
-    }
+    if (!less.length) return substr.length;
     // repeat the process with substrings excluding those characters
     const matches = substr.match(new RegExp(`[^${less.join('')}]+`, 'g'));
     if (matches) for (const match of matches) find(match);
   };
 
-  find(str);
-
-  return maxLength;
+  return Math.max(find(str));
 };
+
+/* v2
+// Runtime: 88 ms, faster than 78.97% of JavaScript online submissions for Longest Substring with At Least K Repeating Characters.
+// Memory Usage: 40.1 MB, less than 77.25% of JavaScript online submissions for Longest Substring with At Least K Repeating Characters.
+const longestSubstring = (str, k) => {
+  if (k < 2) return str.length;
+
+  const find = substr => {
+    // count repetitions
+    const seen = {};
+    for (const char of substr) seen[char] = seen[char] + 1 || 1;
+    // find characters that repeted less than `k` times
+    const less = Object.keys(seen).filter(char => seen[char] < k);
+    // update max length if the condition is met
+    if (!less.length) return substr.length;
+    // repeat the process with substrings excluding those characters
+    const matches = substr.match(new RegExp(`[^${less.join('')}]+`, 'g'));
+    if (matches) for (const match of matches) find(match);
+  };
+
+  return Math.max(find(str));
+};
+*/
 
 /* v1, failed
 const longestSubstring = (str, k) => {
