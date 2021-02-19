@@ -14,7 +14,7 @@ const longestSubstring = (str, k) => {
     if (!less.length) return substr.length;
     // repeat the process with substrings excluding those characters
     const matches = substr.match(new RegExp(`[^${less.join('')}]+`, 'g'));
-    if (matches) for (const match of matches) find(match);
+    return matches ? matches.reduce((maxLength, match) => Math.max(maxLength, find(match)), 0) : 0;
   };
 
   return Math.max(find(str));
@@ -26,20 +26,26 @@ const longestSubstring = (str, k) => {
 const longestSubstring = (str, k) => {
   if (k < 2) return str.length;
 
+  let maxLength = 0;
+
   const find = substr => {
     // count repetitions
     const seen = {};
     for (const char of substr) seen[char] = seen[char] + 1 || 1;
-    // find characters that repeted less than `k` times
+    // find character that repeted less than `k` times
     const less = Object.keys(seen).filter(char => seen[char] < k);
-    // update max length if the condition is met
-    if (!less.length) return substr.length;
-    // repeat the process with substrings excluding those characters
+    if (!less.length) {
+      maxLength = Math.max(maxLength, substr.length);
+      return;
+    }
+    // repeat the process with substring
     const matches = substr.match(new RegExp(`[^${less.join('')}]+`, 'g'));
     if (matches) for (const match of matches) find(match);
   };
 
-  return Math.max(find(str));
+  find(str);
+
+  return maxLength;
 };
 */
 
