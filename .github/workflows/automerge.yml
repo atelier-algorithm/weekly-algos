@@ -14,7 +14,7 @@ jobs:
         uses: 'pascalgn/automerge-action@v0.13.0'
         env:
           MERGE_LABELS: ''
-          MERGE_METHOD: 'squash'
+          MERGE_METHOD: 'rebase'
           MERGE_COMMIT_MESSAGE: 'pull-request-title'
           MERGE_DELETE_BRANCH: true
           UPDATE_LABELS: ''
