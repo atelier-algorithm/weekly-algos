@@ -1,13 +1,19 @@
-# Runtime: 5332 ms, faster than 5.06% of Python3 online submissions
-# Memory Usage: 17.6 MB, less than 63.62% of Python3 online submissions
+# Runtime: 120 ms, faster than 29.53% of Python3 online submissions
+# Memory Usage: 25 MB, less than 6.09% of Python3 online submissions
 class Solution:
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
-        sorted_strs = [''.join(sorted(x)) for x in strs]
         result_list = []
-        for item in set(sorted_strs):
-            result = []
-            for i in range(len(sorted_strs)):
-                if sorted_strs[i] == item:
-                    result.append(strs[i])
-            result_list.append(result)
+        hashmap = {}
+        for item in strs:
+            target = hashmap
+            for c in sorted(item):
+                if c not in target:
+                    target[c] = {}
+                target = target[c]
+
+            if 0 not in target:
+                target[0] = []
+                result_list.append(target[0])
+            target[0].append(item)
+
         return result_list
