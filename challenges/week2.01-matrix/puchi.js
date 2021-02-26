@@ -4,7 +4,7 @@
 const updateMatrix = matrix => {
   // BFS 큐, 포인터
   const queue = [];
-  let tail = 0;
+  let head = 0;
   // 거리
   const distances = matrix.map((row, rowIndex) =>
     row.map((node, colIndex) => {
@@ -16,8 +16,8 @@ const updateMatrix = matrix => {
   const dRow = [-1, 0, 1, 0];
   const dCol = [0, 1, 0, -1];
 
-  while (queue[tail]) {
-    const [row, col] = queue[tail++];
+  while (queue[head]) {
+    const [row, col] = queue[head++];
     const distance = distances[row][col];
     // 인접한 셀을 돌면서
     for (let i = 0; i < 4; i += 1) {
