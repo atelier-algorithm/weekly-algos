@@ -13,19 +13,19 @@ const maxNumberOfFamilies = (n, reserved) => {
 
   // 예약석을 행(오름차순) + 열(오름차순) 순으로 정렬하고,
   // 예약석이 있는 줄에서 4인석의 갯수를 계산함
-  reserved
-    .sort(([aRow, aCol], [zRow, zCol]) => (aRow === zRow ? aCol - zCol : aRow - zRow))
-    .forEach(([row, col]) => {
-      if (row !== lastRow) {
-        families += (isLeftEmpty || isMiddleEmpty || isRightEmpty) + (isLeftEmpty && isRightEmpty);
-        checkedRows += 1;
-        lastRow = row;
-        [isLeftEmpty, isMiddleEmpty, isRightEmpty] = [true, true, true];
-      }
-      if (isLeftEmpty) isLeftEmpty = offRange(col, 2, 5);
-      if (isMiddleEmpty) isMiddleEmpty = offRange(col, 4, 7);
-      if (isRightEmpty) isRightEmpty = offRange(col, 6, 9);
-    });
+  reserved.sort(([aRow, aCol], [zRow, zCol]) => (aRow === zRow ? aCol - zCol : aRow - zRow));
+
+  for (const [row, col] of reserved) {
+    if (row !== lastRow) {
+      families += (isLeftEmpty || isMiddleEmpty || isRightEmpty) + (isLeftEmpty && isRightEmpty);
+      checkedRows += 1;
+      lastRow = row;
+      [isLeftEmpty, isMiddleEmpty, isRightEmpty] = [true, true, true];
+    }
+    if (isLeftEmpty) isLeftEmpty = offRange(col, 2, 5);
+    if (isMiddleEmpty) isMiddleEmpty = offRange(col, 4, 7);
+    if (isRightEmpty) isRightEmpty = offRange(col, 6, 9);
+  }
 
   // 마지막 행 처리
   families += (isLeftEmpty || isMiddleEmpty || isRightEmpty) + (isLeftEmpty && isRightEmpty);
