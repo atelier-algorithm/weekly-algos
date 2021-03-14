@@ -1,23 +1,18 @@
-# Runtime: 896 ms, faster than 5.04% of Python3 online submissions
-# Memory Usage: 18.5 MB, less than 5.43% of Python3 online submissions
+# Runtime: 612 ms, faster than 93.80% of Python3 online submissions
+# Memory Usage: 17.8 MB, less than 78.29% of Python3 online submissions
+from collections import defaultdict
+
 class Solution:
     def maxNumberOfFamilies(self, n: int, reservedSeats: List[List[int]]) -> int:
-        reservedSeats.sort()
-        target = sorted(list({seats[0] for seats in reservedSeats}))
-        group = (n - len(target)) * 2
-        pnt = 0
-        for row in target:
-            cols = []
-            while pnt < len(reservedSeats) and reservedSeats[pnt][0] == row:
-                cols.append(reservedSeats[pnt][1])
-                pnt += 1
+        reserved = defaultdict(int)
+        for row, col in reservedSeats:
+            if col in range(2, 10):
+                reserved[row] |= 1 << (10 - col)
 
-            seats = { int(x / 2 - 1) for x in cols if x in range(2, 10) } # 2 <= x < 10 to {0, 1, 2, 3}
-            if seats == {0, 1} or seats == {2, 3} or seats == {0, 3}:
+        group = (n - len(reserved)) * 2
+        for row in reserved:
+            if reserved[row] & 0b0000011110 == 0 or \
+               reserved[row] & 0b0001111000 == 0 or \
+               reserved[row] & 0b0111100000 == 0:
                 group += 1
-            elif len(seats) == 1:
-                group += 1
-            elif len(seats) == 0:
-                group += 2
-
         return group
