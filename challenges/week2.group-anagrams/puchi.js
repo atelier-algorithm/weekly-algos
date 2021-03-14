@@ -24,6 +24,8 @@ describe('group-anagrams', () => {
     ${['']}                                       | ${[['']]}
     ${['a']}                                      | ${[['a']]}
   `('returns $output from $input', ({ input, output }) => {
-    expect(groupAnagrams(input)).toEqual(output);
+    expect(groupAnagrams(input).map(arr => arr.sort())).toIncludeSameMembers(
+      output.map(arr => arr.sort())
+    );
   });
 });
