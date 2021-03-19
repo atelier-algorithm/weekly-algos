@@ -1,35 +1,51 @@
-const findPaths = (m, n, N, i, j) => {
-  const stack = [[i, j, 0]];
-  let count = 0;
+// Runtime: 120 ms, faster than 62.96% of JavaScript online submissions for Out of Boundary Paths.
+// Memory Usage: 46.1 MB, less than 62.96% of JavaScript online submissions for Out of Boundary Paths.
 
-  while (stack[0]) {
-    const [x, y, depth] = stack.pop();
-    // 그리드 바깥에 나간 경우를 카운트
-    if (x === -1 || x === m || y === -1 || y === n) {
-      count += 1;
-      continue;
+const MOD = 10 ** 9 + 7;
+
+const findPaths = (m, n, N, i, j) => {
+  let count = 0;
+  let memo = { [i]: { [j]: 1 } };
+
+  for (let times = 0; times < N; times += 1) {
+    const temp = {};
+    let $row;
+    let $col;
+    for (const row in memo) {
+      $row = +row;
+      for (const col in memo[row]) {
+        $col = +col;
+        const balls = memo[row][col];
+        if (!$row) count += balls;
+        else addValue(balls, $row - 1, $col, temp);
+        if ($row === m - 1) count += balls;
+        else addValue(balls, $row + 1, $col, temp);
+        if (!$col) count += balls;
+        else addValue(balls, $row, $col - 1, temp);
+        if ($col === n - 1) count += balls;
+        else addValue(balls, $row, $col + 1, temp);
+        count %= MOD;
+      }
     }
-    // 탐색 깊이가 N에 도달할 때까지 상하좌우로 1칸 이동
-    if (depth < N) {
-      if (y >= 0) stack.push([x, y - 1, depth + 1]);
-      if (x < m) stack.push([x + 1, y, depth + 1]);
-      if (y < n) stack.push([x, y + 1, depth + 1]);
-      if (x >= 0) stack.push([x - 1, y, depth + 1]);
-    }
+    memo = temp;
   }
 
-  return count % 1000000007;
+  return count;
 };
 
-// findPaths(2, 2, 2, 0, 0);
+function addValue(value, row, col, map) {
+  if (!(row in map)) map[row] = {};
+  map[row][col] = ((map[row][col] || 0) + value) % MOD;
+}
 
 describe('out-of-boundary-paths', () => {
   test.each`
-    m    | n    | N     | i    | j    | output
-    ${2} | ${2} | ${2}  | ${0} | ${0} | ${6}
-    ${1} | ${3} | ${3}  | ${0} | ${1} | ${12}
-    ${8} | ${4} | ${10} | ${5} | ${0} | ${43458}
-    ${8} | ${7} | ${16} | ${1} | ${5} | ${102984580}
+    m     | n    | N     | i     | j    | output
+    ${2}  | ${2} | ${2}  | ${0}  | ${0} | ${6}
+    ${1}  | ${3} | ${3}  | ${0}  | ${1} | ${12}
+    ${8}  | ${4} | ${10} | ${5}  | ${0} | ${43458}
+    ${8}  | ${7} | ${16} | ${1}  | ${5} | ${102984580}
+    ${36} | ${5} | ${50} | ${15} | ${3} | ${390153306}
   `('returns $output from [$m, $n, $N, $i, $j]', ({ m, n, N, i, j, output }) => {
     expect(findPaths(m, n, N, i, j)).toBe(output);
   });
