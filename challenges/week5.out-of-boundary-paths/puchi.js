@@ -5,8 +5,12 @@ const MOD = 10 ** 9 + 7;
 
 const findPaths = (m, n, N, i, j) => {
   let count = 0;
+  // 공이 존재하는 매트릭스 칸의 모음
+  // WHEN i = 0, j = 1; memo = { "0": { "1": 1 } };
   let memo = { [i]: { [j]: 1 } };
 
+  // N 횟수만큼 볼을 4방향으로 확산, 그리드의 가장자리에 있을 경우
+  // 공이 그리드 바깥으로 나간 만큼 count를 가산.
   for (let times = 0; times < N; times += 1) {
     const temp = {};
     let $row;
@@ -24,7 +28,7 @@ const findPaths = (m, n, N, i, j) => {
         else addValue(balls, $row, $col - 1, temp);
         if ($col === n - 1) count += balls;
         else addValue(balls, $row, $col + 1, temp);
-        count %= MOD;
+        count %= MOD; // 정수 가드
       }
     }
     memo = temp;
@@ -33,6 +37,7 @@ const findPaths = (m, n, N, i, j) => {
   return count;
 };
 
+// map 그리드의 (row, col) 지점에 value만큼의 공을 추가
 function addValue(value, row, col, map) {
   if (!(row in map)) map[row] = {};
   map[row][col] = ((map[row][col] || 0) + value) % MOD;
