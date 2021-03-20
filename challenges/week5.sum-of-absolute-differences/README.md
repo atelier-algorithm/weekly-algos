@@ -26,5 +26,5 @@ Output: [24,15,13,15,21]
 
 ## Constraints:
 
-- `2 <= nums.length <= 105`
-- `1 <= nums[i] <= nums[i + 1] <= 104`
+- <code>2 <= nums.length <= 10<sup>5</sup></code>
+- <code>1 <= nums[i] <= nums[i + 1] <= 10<sup>4</sup></code>
